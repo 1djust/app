@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'settings_screen.dart';
 import 'payment_screen.dart';
 
+// Figours fintech app - Home screen built by Justus Ogunduyi 🚀
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
