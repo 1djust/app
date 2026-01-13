@@ -14,12 +14,16 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
-
     // Verify that the Splash Screen is displayed initially.
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // You can add more checks here, e.g., finding the logo via image asset if mockable
-    // or just verifying the absence of the Home Screen text initially.
-    expect(find.text('0'), findsNothing);
+    // Wait for the Splash Screen timer and navigation to complete
+    await tester.pump(const Duration(seconds: 8));
+    await tester.pumpAndSettle(); // Allow navigation animation to finish
+
+    // Verify Splash Screen is gone and IntroScreen is displayed
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('0'),
+        findsNothing); // Keep original negative check or update logic
   });
 }

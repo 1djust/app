@@ -299,71 +299,73 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
         border: Border.all(color: const Color(0xFFE5ECF6)),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _paymentType = 'Single Payment'),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: _paymentType == 'Single Payment'
-                      ? Colors.white
-                      : Colors
-                          .transparent, // Actually selection usually implies bg change or border.
-                  // Image shows customized radio look
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Radio<String>(
-                      value: 'Single Payment',
-                      groupValue: _paymentType,
-                      onChanged: (val) => setState(() => _paymentType = val!),
-                      fillColor:
-                          WidgetStateProperty.all(const Color(0xFFEAA92C)),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    const Text(
-                      'Single Payment',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _paymentType = 'Bulk Payment'),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: _paymentType == 'Bulk Payment'
-                      ? Colors.white
-                      : Colors.transparent,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Radio<String>(
-                      value: 'Bulk Payment',
-                      groupValue: _paymentType,
-                      onChanged: (val) => setState(() => _paymentType = val!),
-                      fillColor:
-                          WidgetStateProperty.all(const Color(0xFFEAA92C)),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    const Text(
-                      'Bulk Payment',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
+      child: RadioGroup<String>(
+        groupValue: _paymentType,
+        onChanged: (val) {
+          if (val != null) {
+            setState(() => _paymentType = val);
+          }
+        },
+        child: Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _paymentType = 'Single Payment'),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: _paymentType == 'Single Payment'
+                        ? Colors.white
+                        : Colors.transparent,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Radio<String>(
+                        value: 'Single Payment',
+                        fillColor:
+                            WidgetStateProperty.all(const Color(0xFFEAA92C)),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      const Text(
+                        'Single Payment',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _paymentType = 'Bulk Payment'),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: _paymentType == 'Bulk Payment'
+                        ? Colors.white
+                        : Colors.transparent,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Radio<String>(
+                        value: 'Bulk Payment',
+                        fillColor:
+                            WidgetStateProperty.all(const Color(0xFFEAA92C)),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      const Text(
+                        'Bulk Payment',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

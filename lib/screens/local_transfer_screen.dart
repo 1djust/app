@@ -78,7 +78,11 @@ class LocalTransferScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        // TODO: View all beneficiaries
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  'All beneficiaries feature coming soon')),
+                        );
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -126,7 +130,10 @@ class LocalTransferScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        // TODO: View more transactions
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Transaction history coming soon')),
+                        );
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -153,7 +160,7 @@ class LocalTransferScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final t = _recentTransfers[index];
-                    return _buildRecentTransferItem(t);
+                    return _buildRecentTransferItem(context, t);
                   },
                 ),
               ],
@@ -216,7 +223,8 @@ class LocalTransferScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentTransferItem(Map<String, dynamic> transfer) {
+  Widget _buildRecentTransferItem(
+      BuildContext context, Map<String, dynamic> transfer) {
     final bool isSuccess = transfer['status'] == 'Successful';
     return Container(
       padding: const EdgeInsets.all(12),
@@ -303,7 +311,13 @@ class LocalTransferScreen extends StatelessWidget {
                 height: 28,
                 child: OutlinedButton(
                   onPressed: () {
-                    // TODO: Send again logic
+                    // Navigate to NewLocalTransferScreen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NewLocalTransferScreen(),
+                      ),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFFE8EDF2),

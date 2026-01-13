@@ -95,7 +95,11 @@ class PaymentScreen extends StatelessWidget {
                             ),
                           );
                         } else {
-                          // TODO: Navigate to other flows
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    '${option['title']} feature coming soon')),
+                          );
                         }
                       },
                     );
