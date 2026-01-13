@@ -27,10 +27,10 @@ class ProgressBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isActive
                       ? (isCurrent
-                            ? const Color(0xFFEAA92C)
-                            : const Color(0xFFEAA92C).withValues(
-                                alpha: 0.5,
-                              )) // Current is solid, active invalid is inactive color in some designs but let's stick to active color or grey.
+                          ? const Color(0xFFEAA92C)
+                          : const Color(0xFFEAA92C).withValues(
+                              alpha:
+                                  0.5)) // Current is solid, active invalid is inactive color in some designs but let's stick to active color or grey.
                       // Looking at design:
                       // Step 1: All grey except 1? No, usually previous are completed.
                       // Design shows active step is Orange. Previous steps are likely completed (also Orange or Grey?).

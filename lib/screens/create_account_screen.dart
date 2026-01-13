@@ -213,7 +213,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     },
                   );
 
-                  if (selected != null) {
+                  if (selected != null && mounted) {
                     setState(() {
                       _selectedCountry = selected;
                     });

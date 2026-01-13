@@ -48,9 +48,11 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        setState(() {
-          _banks = data.map((e) => e['name'] as String).toList()..sort();
-        });
+        if (mounted) {
+          setState(() {
+            _banks = data.map((e) => e['name'] as String).toList()..sort();
+          });
+        }
       }
     } catch (e) {
       debugPrint('Error loading banks: $e');
@@ -116,27 +118,22 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-
               _buildLabel('Amount your beneficiary will receive'),
               const SizedBox(height: 8),
               _buildReceiveAmountDisplay(),
               const SizedBox(height: 24),
-
               _buildLabel('Payment Type'),
               const SizedBox(height: 8),
               _buildPaymentTypeSelector(),
               const SizedBox(height: 24),
-
               _buildLabel('Select Bank'),
               const SizedBox(height: 8),
               _buildBankDropdown(),
               const SizedBox(height: 24),
-
               _buildLabel('Account Number'),
               const SizedBox(height: 8),
               _buildAccountInput(),
               const SizedBox(height: 48),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -276,7 +273,8 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
             child: Row(
               children: [
                 Image.asset(
-                  _currencyIcons['NGN']!, // Always display in NGN for local transfer
+                  _currencyIcons[
+                      'NGN']!, // Always display in NGN for local transfer
                   width: 16,
                   height: 16,
                 ),
@@ -312,7 +310,7 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
                   color: _paymentType == 'Single Payment'
                       ? Colors.white
                       : Colors
-                            .transparent, // Actually selection usually implies bg change or border.
+                          .transparent, // Actually selection usually implies bg change or border.
                   // Image shows customized radio look
                 ),
                 child: Row(
@@ -322,7 +320,8 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
                       value: 'Single Payment',
                       groupValue: _paymentType,
                       onChanged: (val) => setState(() => _paymentType = val!),
-                      activeColor: const Color(0xFFEAA92C),
+                      fillColor:
+                          WidgetStateProperty.all(const Color(0xFFEAA92C)),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     const Text(
@@ -351,7 +350,8 @@ class _NewLocalTransferScreenState extends State<NewLocalTransferScreen> {
                       value: 'Bulk Payment',
                       groupValue: _paymentType,
                       onChanged: (val) => setState(() => _paymentType = val!),
-                      activeColor: const Color(0xFFEAA92C),
+                      fillColor:
+                          WidgetStateProperty.all(const Color(0xFFEAA92C)),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     const Text(

@@ -263,10 +263,10 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                       });
                     },
                     // activeColor: const Color(0xFFEAA92C), // Deprecated
-                    thumbColor: MaterialStateProperty.resolveWith<Color?>((
-                      Set<MaterialState> states,
+                    thumbColor: WidgetStateProperty.resolveWith<Color?>((
+                      Set<WidgetState> states,
                     ) {
-                      if (states.contains(MaterialState.selected)) {
+                      if (states.contains(WidgetState.selected)) {
                         return const Color(0xFFEAA92C);
                       }
                       return null; // Use default
