@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'verify_transaction_modal.dart';
 
 class ReviewTransactionScreen extends StatefulWidget {
   final double amount;
@@ -39,11 +40,26 @@ class _ReviewTransactionScreenState extends State<ReviewTransactionScreen> {
   }
 
   void _onConfirmPayment() {
-    // Navigate to Success / Enter Pin / API Call
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Processing Payment...'),
-        backgroundColor: Color(0xFF15181A),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.25),
+      transitionAnimationController: AnimationController(
+        vsync: Navigator.of(context),
+        duration: const Duration(milliseconds: 400),
+        reverseDuration: const Duration(milliseconds: 300),
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (context) => VerifyTransactionModal(
+        amount: widget.amount,
+        recipientName:
+            widget.accountName, // Assuming accountName is recipientName
+        accountName: widget.accountName,
+        accountNumber: widget.accountNumber,
+        bankName: widget.bankName,
       ),
     );
   }
