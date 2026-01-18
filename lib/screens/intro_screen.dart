@@ -1,7 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'login_screen.dart';
 import 'create_account_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -10,207 +11,243 @@ class IntroScreen extends StatefulWidget {
   State<IntroScreen> createState() => _IntroScreenState();
 }
 
-class _IntroScreenState extends State<IntroScreen> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  Timer? _timer;
+class _IntroScreenState extends State<IntroScreen>
+    with TickerProviderStateMixin {
+  // Staggered entrance states
+  bool _showGlobe = false;
+  bool _showText = false;
+  bool _showButtons = false;
 
-  final List<Map<String, String>> _slides = [
-    {
-      'title': 'Streamlining Online\nPayments Process',
-      'description': 'Get to know a lot about the\napplication',
-      'image': 'assets/images/app intro 1.png',
-    },
-    {
-      'title': 'Safe & Reliable Anytime.\nAnywhere.',
-      'description':
-          'Elevate Your Transaction Experience with\nAbsolute Security and Dependability',
-      'image': 'assets/images/app intro 2.png',
-    },
-    {
-      'title': 'Unexpected expenses or\nfinancial emergencies',
-      'description':
-          'Look for a high-yield savings account or a\nmoney market account to earn more\ninterest on your savings',
-      'image': 'assets/images/app intro 3.png',
-    },
-  ];
+  // Floating animation
+  late AnimationController _floatingController;
+  late Animation<double> _floatingAnimation;
+
+  // Interactive scale
+  double _scale = 1.0;
 
   @override
   void initState() {
     super.initState();
-    _startAutoScroll();
+
+    // Initialize floating controller
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _floatingAnimation = Tween<double>(begin: 0, end: 15.0).animate(
+      CurvedAnimation(parent: _floatingController, curve: Curves.easeInOut),
+    );
+
+    // Staggered entrance sequence
+    _startEntranceSequence();
   }
 
-  void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < _slides.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
+  void _startEntranceSequence() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (mounted) setState(() => _showGlobe = true);
 
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
-      }
-    });
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (mounted) setState(() => _showText = true);
+
+    await Future.delayed(const Duration(milliseconds: 400));
+    if (mounted) setState(() => _showButtons = true);
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
-    _pageController.dispose();
+    _floatingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Brand Colors
+    const Color primaryColor = Color(0xFF15181A);
+    const Color accentColor = Color(0xFFF0B140);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (int page) {
-                  setState(() {
-                    _currentPage = page;
-                  });
-                },
-                itemCount: _slides.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Image
-                        Expanded(
-                          flex: 3,
-                          child: Image.asset(
-                            _slides[index]['image']!,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        // Indicators
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            _slides.length,
-                            (indicatorIndex) => AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              height: 8,
-                              width: 8,
-                              decoration: BoxDecoration(
-                                color: _currentPage == indicatorIndex
-                                    ? Colors.amber
-                                    : Colors.amber.withValues(alpha: 0.3),
-                                shape: BoxShape.circle,
+      backgroundColor: primaryColor,
+      body: Stack(
+        children: [
+          // Background Elements
+          SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 5, // Gives more space to the hero section
+                  child: Center(
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 800),
+                      opacity: _showGlobe ? 1.0 : 0.0,
+                      curve: Curves.easeOut,
+                      child: GestureDetector(
+                        onTapDown: (_) => setState(() => _scale = 0.95),
+                        onTapUp: (_) => setState(() => _scale = 1.0),
+                        onTapCancel: () => setState(() => _scale = 1.0),
+                        child: AnimatedScale(
+                          scale: _scale,
+                          duration: const Duration(milliseconds: 100),
+                          child: AnimatedBuilder(
+                            animation: _floatingAnimation,
+                            builder: (context, child) {
+                              return Transform.translate(
+                                offset: Offset(0, -_floatingAnimation.value),
+                                child: child,
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Image.asset(
+                                'assets/images/2hero.png',
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        // Title
-                        Text(
-                          _slides[index]['title']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF15181A),
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Description
-                        Text(
-                          _slides[index]['description']!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            height: 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            // Buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 24.0,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CreateAccountScreen(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF15181A),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Create a new account',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFF15181A)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Color(0xFF2C3E50),
-                          fontSize: 16,
+                ),
+
+                // Typography Section
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: AnimatedSlide(
+                      offset: _showText ? Offset.zero : const Offset(0, 0.2),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutQuart,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 800),
+                        opacity: _showText ? 1.0 : 0.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Global Financial\nEmpowerment',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                height: 1.1,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Access the world’s economy, anytime.',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: const Color.fromRGBO(255, 255, 255, 0.7),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+
+                // CTA Section
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+                  child: AnimatedSlide(
+                    offset: _showButtons ? Offset.zero : const Offset(0, 0.5),
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeOutCubic,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 800),
+                      opacity: _showButtons ? 1.0 : 0.0,
+                      child: Column(
+                        children: [
+                          // Primary Button: Get Started
+                          Container(
+                            width: double.infinity,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(32),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromRGBO(240, 177, 64, 0.2),
+                                  blurRadius: 16,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CreateAccountScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: accentColor,
+                                foregroundColor: Colors.black,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32),
+                                ),
+                              ),
+                              child: Text(
+                                'Get Started',
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Secondary Button: Sign In
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                side: const BorderSide(
+                                  color: Color(0xFF2C3E50), // Soft gray border
+                                  width: 1,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32),
+                                ),
+                              ),
+                              child: Text(
+                                'Sign In',
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
