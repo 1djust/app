@@ -235,12 +235,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           mainAxisAlignment:
               alignRight ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
-            Image.asset(flagPath,
-                width: 16,
-                height: 16,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.public, size: 16)),
-            const SizedBox(width: 8),
+            const Icon(Icons.keyboard_arrow_down, size: 14, color: Colors.grey),
+            const SizedBox(width: 4),
             Text(
               label,
               style: TextStyle(
@@ -249,8 +245,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                 color: isDark ? AppColors.textMainDark : AppColors.textMain,
               ),
             ),
-            const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down, size: 14, color: Colors.grey),
+            const SizedBox(width: 8),
+            Image.asset(flagPath,
+                width: 16,
+                height: 16,
+                errorBuilder: (_, __, ___) =>
+                    const Icon(Icons.public, size: 16)),
           ],
         ),
         const SizedBox(height: 8),
