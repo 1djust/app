@@ -8,6 +8,7 @@ class CurrencyCard extends StatefulWidget {
   final double balance;
   final double trendPercentage;
   final Color accentColor;
+  final VoidCallback? onTap;
 
   const CurrencyCard({
     super.key,
@@ -16,6 +17,7 @@ class CurrencyCard extends StatefulWidget {
     required this.balance,
     required this.trendPercentage,
     required this.accentColor,
+    this.onTap,
   });
 
   @override
@@ -85,7 +87,10 @@ class _CurrencyCardState extends State<CurrencyCard> {
               ],
       ),
       child: InkWell(
-        onTap: () => setState(() => _isExpanded = !_isExpanded),
+        onTap: () {
+          setState(() => _isExpanded = !_isExpanded);
+          if (widget.onTap != null) widget.onTap!();
+        },
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Column(

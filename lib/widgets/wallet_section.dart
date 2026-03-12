@@ -3,6 +3,8 @@ import '../theme/app_colors.dart';
 
 class WalletSection extends StatefulWidget {
   final double totalBalance;
+  final String currencySymbol;
+  final String currencyLabel;
   final List<String> currencies;
   final int initialIndex;
   final Function(int) onCurrencyChanged;
@@ -10,6 +12,8 @@ class WalletSection extends StatefulWidget {
   const WalletSection({
     super.key,
     required this.totalBalance,
+    required this.currencySymbol,
+    required this.currencyLabel,
     required this.currencies,
     this.initialIndex = 0,
     required this.onCurrencyChanged,
@@ -27,6 +31,14 @@ class _WalletSectionState extends State<WalletSection> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+  }
+
+  @override
+  void didUpdateWidget(WalletSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialIndex != widget.initialIndex) {
+      _selectedIndex = widget.initialIndex;
+    }
   }
 
   String _formatBalance(double balance) {
@@ -83,7 +95,7 @@ class _WalletSectionState extends State<WalletSection> {
           ),
           const SizedBox(height: 12),
           Text(
-            '₦${_formatBalance(widget.totalBalance)}',
+            '${widget.currencySymbol}${_formatBalance(widget.totalBalance)}',
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w800,
@@ -93,7 +105,7 @@ class _WalletSectionState extends State<WalletSection> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Total across 3 wallets',
+            'Total in ${widget.currencyLabel}',
             style: TextStyle(
               fontSize: 12,
               color: isDark ? AppColors.textMutedDark : AppColors.textMuted,

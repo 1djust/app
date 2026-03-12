@@ -1,8 +1,80 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
-class ExchangeWidget extends StatelessWidget {
+class ExchangeWidget extends StatefulWidget {
   const ExchangeWidget({super.key});
+
+  @override
+  State<ExchangeWidget> createState() => _ExchangeWidgetState();
+}
+
+class _ExchangeWidgetState extends State<ExchangeWidget> {
+  String fromCurrency = 'GBP';
+  String toCurrency = 'NGN';
+  double fromAmount = 100.0;
+
+  final Map<String, Map<String, double>> _rates = {
+    'GBP': {'NGN': 2045.50, 'EUR': 1.18, 'GBP': 1.0},
+    'EUR': {'NGN': 1710.20, 'GBP': 0.85, 'EUR': 1.0},
+    'NGN': {'GBP': 0.00049, 'EUR': 0.00058, 'NGN': 1.0},
+  };
+
+  final Map<String, String> _flags = {
+    'GBP': 'assets/images/gbp.png',
+    'NGN': 'assets/images/ngn.png',
+    'EUR': 'assets/images/eur.png',
+  };
+
+  double get toAmount =>
+      fromAmount * (_rates[fromCurrency]?[toCurrency] ?? 1.0);
+
+  String _formatNumber(double val) {
+    return val
+        .toStringAsFixed(fromAmount == fromAmount.toInt() ? 0 : 2)
+        .replaceAllMapped(
+            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+  }
+
+  void _showCurrencySelector(bool isFrom) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.surfaceDark
+              : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: ['NGN', 'GBP', 'EUR'].map((currency) {
+            return ListTile(
+              leading: Image.asset(
+                _flags[currency]!,
+                width: 24,
+                height: 24,
+                errorBuilder: (_, __, ___) => const Icon(Icons.public),
+              ),
+              title: Text(currency,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              onTap: () {
+                setState(() {
+                  if (isFrom) {
+                    fromCurrency = currency;
+                  } else {
+                    toCurrency = currency;
+                  }
+                });
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,40 +160,55 @@ class ExchangeWidget extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildCurrencyInput(
-                        context: context,
-                        label: 'NGN',
-                        value: '160,522',
-                        flagPath: 'assets/images/ngn.png',
-                        isResult: true,
-                        alignRight: false,
+                      child: GestureDetector(
+                        onTap: () => _showCurrencySelector(true),
+                        child: _buildCurrencyInput(
+                          context: context,
+                          label: fromCurrency,
+                          value: _formatNumber(fromAmount),
+                          flagPath: _flags[fromCurrency]!,
+                          alignRight: false,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 40),
                     Expanded(
-                      child: _buildCurrencyInput(
-                        context: context,
-                        label: 'USD',
-                        value: '100',
-                        flagPath: 'assets/images/usd.png',
-                        alignRight: true,
+                      child: GestureDetector(
+                        onTap: () => _showCurrencySelector(false),
+                        child: _buildCurrencyInput(
+                          context: context,
+                          label: toCurrency,
+                          value: _formatNumber(toAmount),
+                          flagPath: _flags[toCurrency]!,
+                          isResult: true,
+                          alignRight: true,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? AppColors.midnightSurfaceLighter
-                        : Colors.indigo.shade50,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: isDark ? AppColors.borderDark : Colors.white,
-                        width: 2),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      final temp = fromCurrency;
+                      fromCurrency = toCurrency;
+                      toCurrency = temp;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.midnightSurfaceLighter
+                          : Colors.indigo.shade50,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: isDark ? AppColors.borderDark : Colors.white,
+                          width: 2),
+                    ),
+                    child: Icon(Icons.swap_horiz,
+                        color: Colors.indigo.shade400, size: 20),
                   ),
-                  child: Icon(Icons.swap_horiz,
-                      color: Colors.indigo.shade400, size: 20),
                 ),
               ],
             ),
@@ -163,7 +250,12 @@ class ExchangeWidget extends StatelessWidget {
                   color: isDark ? AppColors.textMainDark : AppColors.textMain,
                 ),
               ),
+              const Icon(Icons.keyboard_arrow_down,
+                  size: 14, color: Colors.grey),
             ] else ...[
+              const Icon(Icons.keyboard_arrow_down,
+                  size: 14, color: Colors.grey),
+              const SizedBox(width: 4),
               Text(
                 label,
                 style: TextStyle(

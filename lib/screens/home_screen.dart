@@ -19,8 +19,40 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  // ignore: unused_field
   int _activeWalletIndex = 0;
+
+  final List<Map<String, dynamic>> _wallets = [
+    {
+      'code': 'NGN',
+      'name': 'Nigerian Naira',
+      'symbol': '₦',
+      'balance': 2847350.0,
+      'trend': 12.5,
+      'color': AppColors.cardGreen,
+    },
+    {
+      'code': 'GBP',
+      'name': 'British Pound',
+      'symbol': '£',
+      'balance': 4280.55,
+      'trend': 3.2,
+      'color': AppColors.cardBlue,
+    },
+    {
+      'code': 'EUR',
+      'name': 'Euro',
+      'symbol': '€',
+      'balance': 2156.80,
+      'trend': -1.8,
+      'color': AppColors.cardPurple,
+    },
+  ];
+
+  void _onCurrencyTapped(int index) {
+    setState(() {
+      _activeWalletIndex = index;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -50,35 +82,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 onNotificationTap: () {},
               ),
               WalletSection(
-                totalBalance: 15332113,
-                currencies: const ['NGN', 'GBP', 'EUR'],
-                onCurrencyChanged: (index) {
-                  setState(() => _activeWalletIndex = index);
-                },
+                totalBalance: _wallets[_activeWalletIndex]['balance'],
+                currencySymbol: _wallets[_activeWalletIndex]['symbol'],
+                currencyLabel: _wallets[_activeWalletIndex]['name'],
+                currencies: _wallets.map((w) => w['code'] as String).toList(),
+                initialIndex: _activeWalletIndex,
+                onCurrencyChanged: _onCurrencyTapped,
               ),
               const SizedBox(height: 16),
               // Currency Cards
-              const CurrencyCard(
-                currencyCode: 'EUR',
-                currencyName: 'Euro',
-                balance: 2156.80,
-                trendPercentage: -1.8,
-                accentColor: AppColors.cardPurple,
-              ),
-              const CurrencyCard(
-                currencyCode: 'GBP',
-                currencyName: 'British Pound',
-                balance: 4280.55,
-                trendPercentage: 3.2,
-                accentColor: AppColors.cardBlue,
-              ),
-              const CurrencyCard(
-                currencyCode: 'NGN',
-                currencyName: 'Nigerian Naira',
-                balance: 2847350,
-                trendPercentage: 12.5,
-                accentColor: AppColors.cardGreen,
-              ),
+              ...List.generate(_wallets.length, (index) {
+                final wallet = _wallets[index];
+                return CurrencyCard(
+                  currencyCode: wallet['code'],
+                  currencyName: wallet['name'],
+                  balance: wallet['balance'],
+                  trendPercentage: wallet['trend'],
+                  accentColor: wallet['color'],
+                  onTap: () => _onCurrencyTapped(index),
+                );
+              }),
               const HomeActionGrid(),
               const ExchangeWidget(),
               const RecentActivityList(),
