@@ -161,19 +161,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showCurrencySelector(true),
-                        child: _buildCurrencyInput(
-                          context: context,
-                          label: fromCurrency,
-                          value: _formatNumber(fromAmount),
-                          flagPath: _flags[fromCurrency]!,
-                          alignRight: false,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 40),
-                    Expanded(
-                      child: GestureDetector(
                         onTap: () => _showCurrencySelector(false),
                         child: _buildCurrencyInput(
                           context: context,
@@ -181,6 +168,19 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                           value: _formatNumber(toAmount),
                           flagPath: _flags[toCurrency]!,
                           isResult: true,
+                          alignRight: false,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 40),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _showCurrencySelector(true),
+                        child: _buildCurrencyInput(
+                          context: context,
+                          label: fromCurrency,
+                          value: _formatNumber(fromAmount),
+                          flagPath: _flags[fromCurrency]!,
                           alignRight: true,
                         ),
                       ),
