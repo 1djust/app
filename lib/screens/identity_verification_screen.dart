@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/progress_bar.dart';
 import 'create_pin_screen.dart';
+import '../theme/app_colors.dart';
 
 class IdentityVerificationScreen extends StatelessWidget {
   const IdentityVerificationScreen({super.key});
@@ -8,12 +9,12 @@ class IdentityVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textMain),
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
@@ -46,16 +47,16 @@ class IdentityVerificationScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF15181A),
+                        color: AppColors.textMain,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Text(
+                    const Text(
                       'To keep your account secure and comply with financial regulations, we need to confirm it’s really you.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: AppColors.textMuted,
                         height: 1.5,
                       ),
                     ),
@@ -65,12 +66,12 @@ class IdentityVerificationScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'WHAT YOU\'LL NEED',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
+                            color: AppColors.textMuted,
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -80,8 +81,8 @@ class IdentityVerificationScreen extends StatelessWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF9E6),
-                            border: Border.all(color: Colors.amber),
+                            color: Colors.amber.withOpacity(0.1),
+                            border: Border.all(color: Colors.amber.shade300),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -123,18 +124,18 @@ class IdentityVerificationScreen extends StatelessWidget {
                     const SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
+                      children: const [
+                        Icon(
                           Icons.lock_outline,
                           size: 16,
-                          color: Colors.grey,
+                          color: AppColors.textMuted,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           'Your data is encrypted and never shared',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[500],
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -148,7 +149,7 @@ class IdentityVerificationScreen extends StatelessWidget {
             // Start Button
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 56,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -160,9 +161,11 @@ class IdentityVerificationScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF15181A),
+                  backgroundColor: AppColors.textMain,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: Row(
@@ -170,7 +173,10 @@ class IdentityVerificationScreen extends StatelessWidget {
                   children: const [
                     Text(
                       'Start Verification',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ),
                     SizedBox(width: 8),
                     Icon(Icons.arrow_forward, color: Colors.white, size: 20),
@@ -193,8 +199,8 @@ class IdentityVerificationScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey[200]!),
+        color: AppColors.surfaceLight,
+        border: Border.all(color: AppColors.borderLight),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -209,8 +215,9 @@ class IdentityVerificationScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF0F6FF), // Lighter Blue
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.borderLight, width: 0.5),
             ),
             child: Image.asset(
               imagePath,
@@ -229,13 +236,14 @@ class IdentityVerificationScreen extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Color(0xFF15181A),
+                    color: AppColors.textMain,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13, color: Colors.grey[500]),
+                  style:
+                      const TextStyle(fontSize: 13, color: AppColors.textMuted),
                 ),
               ],
             ),

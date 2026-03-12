@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart'; // Suggests navigation back to login
+import 'login_screen.dart';
+import '../theme/app_colors.dart';
 
 class VerificationStatusScreen extends StatelessWidget {
   const VerificationStatusScreen({super.key});
@@ -7,11 +8,11 @@ class VerificationStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
-        automaticallyImplyLeading: false, // No back button
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
@@ -25,18 +26,21 @@ class VerificationStatusScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       // Main Image
                       Container(
-                        width: 120,
-                        height: 120,
-                        decoration: const BoxDecoration(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFFF5F5F5),
+                          color: AppColors.surfaceLight,
+                          border: Border.all(
+                              color: AppColors.borderLight, width: 2),
                         ),
                         child: ClipOval(
                           child: Image.asset(
                             'assets/images/Verification.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.verified_user, size: 60),
+                                const Icon(Icons.verified_user,
+                                    size: 80, color: AppColors.primaryGreen),
                           ),
                         ),
                       ),
@@ -51,7 +55,7 @@ class VerificationStatusScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF15181A),
+                              color: AppColors.textMain,
                             ),
                           ),
                           SizedBox(width: 8),
@@ -60,12 +64,12 @@ class VerificationStatusScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
 
-                      Text(
+                      const Text(
                         'Thank you for completing your verification.\nOur compliance team is currently reviewing your information.\nThis process will take less than to 48 hours.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: AppColors.textMuted,
                           height: 1.5,
                         ),
                       ),
@@ -79,11 +83,11 @@ class VerificationStatusScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF15181A),
+                            color: AppColors.textMain,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
                       _buildStep(
                         number: '1',
@@ -91,14 +95,14 @@ class VerificationStatusScreen extends StatelessWidget {
                         description:
                             'Our compliance team will review your KYC documents and assign a risk rating',
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       _buildStep(
                         number: '2',
                         title: 'Account Creation',
                         description:
-                            'Upon approval, your account(s) will be created based on your riskprofile',
+                            'Upon approval, your account(s) will be created based on your risk profile',
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       _buildStep(
                         number: '3',
                         title: 'Email Notification',
@@ -106,23 +110,23 @@ class VerificationStatusScreen extends StatelessWidget {
                             'You\'ll receive an email with your account details and next steps',
                       ),
 
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 40),
 
                       // Need help
                       Wrap(
                         alignment: WrapAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.help_outline,
                             size: 16,
-                            color: Colors.grey[600],
+                            color: AppColors.textMuted,
                           ),
                           const SizedBox(width: 4),
-                          Text(
+                          const Text(
                             'Need help? ',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[600],
+                              color: AppColors.textMuted,
                             ),
                           ),
                           GestureDetector(
@@ -148,7 +152,7 @@ class VerificationStatusScreen extends StatelessWidget {
               // Button
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 56,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
@@ -160,14 +164,19 @@ class VerificationStatusScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF15181A),
+                    backgroundColor: AppColors.textMain,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
                     'Back to Log In',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -188,23 +197,24 @@ class VerificationStatusScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 24,
-          height: 24,
+          width: 28,
+          height: 28,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: AppColors.surfaceLight,
             shape: BoxShape.circle,
+            border: Border.all(color: AppColors.borderLight),
           ),
           child: Text(
             number,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: Colors.black,
+              fontSize: 14,
+              color: AppColors.textMain,
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,15 +222,16 @@ class VerificationStatusScreen extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Color(0xFF15181A),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: AppColors.textMain,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 description,
-                style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                style: const TextStyle(
+                    fontSize: 13, color: AppColors.textMuted, height: 1.4),
               ),
             ],
           ),

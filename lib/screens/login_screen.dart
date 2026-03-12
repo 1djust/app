@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'create_account_screen.dart';
-
 import 'home_screen.dart';
+import '../theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,10 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
@@ -51,62 +54,48 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-                // Header
-                const Text(
+                Text(
                   'Welcome to Figours,',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF15181A),
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Hello there, create New account', // As per design text, though contextually "Sign in to account" makes more sense, sticking to design text or user instruction? Design says "Hello there, create New account" in orange... wait, that looks like a subtitle. The button below says "Sign in".
-                  // Wait, looking at the image:
-                  // "Welcome to Figours," (Black, Bold)
-                  // "Hello there, create New account" (Orange/Amber) - This might be a carousel or dynamic text, but commonly looks like a welcome message.
-                  // BUT the screen is "Sign In". The text "create New account" is confusing if it's the sign in screen.
-                  // However, the rule is "Follow the design exactly". So "Hello there, create New account" it is.
+                  'Hello there, create New account',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.amber,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
-                // Illustration
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey[100], // Background blob
+                    color: isDark
+                        ? AppColors.midnightBase
+                        : AppColors.surfaceLight,
                   ),
-                  // Since I don't have the exact background blob shape from the design as an asset,
-                  // I'll try to use the SVG directly.
                   child: SvgPicture.asset(
                     'assets/images/sign in icon.svg',
                     height: 180,
                   ),
                 ),
-
                 const SizedBox(height: 40),
-
-                // Form Title
-                const Text(
+                Text(
                   'Sign in with your email and\npassword',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF15181A),
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
                 ),
                 const SizedBox(height: 30),
-
-                // Email
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -114,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Colors.grey[800],
+                      color:
+                          isDark ? AppColors.textMainDark : AppColors.textMain,
                     ),
                   ),
                 ),
@@ -122,10 +112,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(
+                      color:
+                          isDark ? AppColors.textMainDark : AppColors.textMain),
                   decoration: InputDecoration(
                     hintText: '@gmail.com',
+                    hintStyle: TextStyle(
+                        color: isDark
+                            ? AppColors.textHintDark
+                            : AppColors.textHint),
+                    fillColor: isDark
+                        ? AppColors.midnightSurface
+                        : AppColors.surfaceLight,
+                    filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -143,8 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-
-                // Password
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -152,7 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Colors.grey[800],
+                      color:
+                          isDark ? AppColors.textMainDark : AppColors.textMain,
                     ),
                   ),
                 ),
@@ -160,10 +171,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
+                  style: TextStyle(
+                      color:
+                          isDark ? AppColors.textMainDark : AppColors.textMain),
                   decoration: InputDecoration(
                     hintText: 'Enter your password',
+                    hintStyle: TextStyle(
+                        color: isDark
+                            ? AppColors.textHintDark
+                            : AppColors.textHint),
+                    fillColor: isDark
+                        ? AppColors.midnightSurface
+                        : AppColors.surfaceLight,
+                    filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -174,7 +207,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         _obscurePassword
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: Colors.grey, // Check eye icon used in design
+                        color: isDark
+                            ? AppColors.textMutedDark
+                            : AppColors.textMuted,
                       ),
                       onPressed: () {
                         setState(() {
@@ -190,8 +225,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-
-                // Forgot Password
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -204,53 +237,42 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Sign In Button
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: _signIn,
                     style: ElevatedButton.styleFrom(
-                      // backgroundColor removed (duplicate)
-                      // The design shows a light grey button. "Sign in" text is white.
-                      // Wait, the design button is Grey. Usually means disabled until typed in.
-                      // Or it's the style. I'll stick to the Primary Color if active, or Grey if disabled.
-                      // Design shows Grey button with White text.
-                      // Let's assume it's disabled state or just the color used in the mockup (before typing).
-                      // I will use the Primary Color for active state for consistency with other screens,
-                      // or matching the exact mockup which is grey. The user said "Follow design exactly".
-                      // I'll make it Grey by default and maybe change to Primary if fields are filled?
-                      // Actually, let's look at "Create Account". It used Primary.
-                      // I'll use Primary Color #15181A but with opacity or just standard.
-                      // Re-reading: "Sign in button: Tap validates...".
-                      // In the image, it is Grey. I will use a Grey color `Color(0xFFD1D5DB)` (Tailwind Gray 300 approx)
-                      // and White text, but maybe verify if it should be valid?
-                      // I'll use the Primary Color `#15181A` because a generic Grey button usually implies disabled.
-                      backgroundColor: const Color(0xFF15181A), // Primary Black
+                      backgroundColor: isDark
+                          ? AppColors.electricAccent
+                          : AppColors.textMain,
+                      foregroundColor:
+                          isDark ? AppColors.midnightBase : Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Sign in',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                          color: isDark ? AppColors.midnightBase : Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
-                // Footer
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Don't have an account? ",
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(
+                          color: isDark
+                              ? AppColors.textMutedDark
+                              : AppColors.textMuted),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -262,7 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       child: const Text(
-                        'Sign Up', // Design says "Sign In" (likely typo for Sign Up, but "Follow exactly")
+                        'Sign Up',
                         style: TextStyle(
                           color: Colors.amber,
                           fontWeight: FontWeight.bold,

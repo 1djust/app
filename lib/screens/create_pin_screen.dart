@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../widgets/progress_bar.dart';
 import '../widgets/custom_keypad.dart';
-import 'verification_status_screen.dart'; // Will create this next
+import 'verification_status_screen.dart';
+import '../theme/app_colors.dart';
 
 class CreatePinScreen extends StatefulWidget {
   final bool isLoginPin;
-  final String? loginPin; // Passed to Transaction PIN step for validation
+  final String? loginPin;
 
   const CreatePinScreen({super.key, required this.isLoginPin, this.loginPin});
 
@@ -41,7 +42,6 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
   void _onSubmit() {
     if (widget.isLoginPin) {
-      // Proceed to Transaction PIN
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -50,7 +50,6 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         ),
       );
     } else {
-      // Validate Transaction PIN != Login PIN
       if (_pin == widget.loginPin) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -64,7 +63,6 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         return;
       }
 
-      // Submit and go to Status
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -77,12 +75,12 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textMain),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -104,7 +102,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF15181A),
+                    color: AppColors.textMain,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -112,12 +110,12 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     widget.isLoginPin
-                        ? 'This PIN is used to uncover your app' // sic "uncover" or "unlock"? Image seems to say "unlock". Text says "uncover". Let's stick to user prompt "uncover" if forced, but user prompt says "unlock your app" in the image description "unlock your app". Wait, image 4 "Create Login PIN" subtitle says "This PIN is used to unlock your app". User text says "login PIN". I'll use "unlock your app".
+                        ? 'This PIN is used to unlock your app'
                         : 'This PIN is required to approve transactions and sensitive action. Make it different from your login PIN.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[600],
+                      color: AppColors.textMuted,
                       height: 1.5,
                     ),
                   ),
@@ -132,38 +130,37 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                       final isFilled = index < _pin.length;
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: widget.isLoginPin ? 20 : 40, // Circles vs Boxes
+                        width: widget.isLoginPin ? 20 : 40,
                         height: widget.isLoginPin ? 20 : 55,
                         decoration: widget.isLoginPin
                             ? BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: isFilled
-                                    ? const Color(0xFFEAA92C)
+                                    ? Colors.amber
                                     : Colors.transparent,
                                 border: Border.all(
-                                  color: isFilled
-                                      ? const Color(0xFFEAA92C)
-                                      : const Color(0xFFEAA92C),
+                                  color: Colors.amber,
                                   width: 2,
                                 ),
                               )
                             : BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
+                                color: AppColors.surfaceLight,
+                                borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isFilled
-                                      ? const Color(0xFFEAA92C)
-                                      : Colors.grey[300]!,
+                                      ? Colors.amber
+                                      : AppColors.borderLight,
+                                  width: 1.5,
                                 ),
                               ),
                         child: !widget.isLoginPin && isFilled
                             ? Center(
                                 child: _obscurePin
                                     ? Container(
-                                        width: 10,
-                                        height: 10,
+                                        width: 12,
+                                        height: 12,
                                         decoration: const BoxDecoration(
-                                          color: Color(0xFFEAA92C),
+                                          color: Colors.amber,
                                           shape: BoxShape.circle,
                                         ),
                                       )
@@ -172,11 +169,11 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF15181A),
+                                          color: AppColors.textMain,
                                         ),
                                       ),
                               )
-                            : null, // Login PIN just shows color fill
+                            : null,
                       );
                     }),
                     if (!widget.isLoginPin) ...[
@@ -186,7 +183,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                           _obscurePin
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: Colors.black,
+                          color: AppColors.textMain,
                         ),
                         onPressed: () {
                           setState(() {
@@ -203,22 +200,32 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
           const Spacer(),
 
-          // Fingerprint (Step 4 only)
+          // Fingerprint
           if (widget.isLoginPin)
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[200]!),
-                borderRadius: BorderRadius.circular(12),
+                color: AppColors.surfaceLight,
+                border: Border.all(color: AppColors.borderLight),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEEF0F2),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
+                      border:
+                          Border.all(color: AppColors.borderLight, width: 0.5),
                     ),
                     child: Image.asset(
                       'assets/images/finger.png',
@@ -226,30 +233,30 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                       height: 24,
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) => const Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
+                        Icons.fingerprint,
+                        color: Colors.amber,
                         size: 24,
                       ),
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Enable Fingerprint',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Color(0xFF15181A),
+                            color: AppColors.textMain,
                           ),
                         ),
                         Text(
                           'Faster, secure login',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey[600],
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -262,15 +269,15 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                         _enableFingerprint = value;
                       });
                     },
-                    // activeColor: const Color(0xFFEAA92C), // Deprecated
                     thumbColor: WidgetStateProperty.resolveWith<Color?>((
                       Set<WidgetState> states,
                     ) {
                       if (states.contains(WidgetState.selected)) {
-                        return const Color(0xFFEAA92C);
+                        return Colors.amber;
                       }
-                      return null; // Use default
+                      return null;
                     }),
+                    activeTrackColor: Colors.amber.withOpacity(0.3),
                   ),
                 ],
               ),

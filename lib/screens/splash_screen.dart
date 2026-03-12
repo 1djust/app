@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'intro_screen.dart';
+import '../theme/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,9 +15,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simulate loading process
-    Timer(const Duration(seconds: 7), () {
+    Timer(const Duration(seconds: 4), () {
       if (mounted) {
-        // Navigate to Intro Screen after 3 seconds
+        // Navigate to Intro Screen after 4 seconds
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const IntroScreen()),
         );
@@ -26,27 +27,47 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: const Color(0xFF15181A), // Primary Dark
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: Center(
         child: Stack(
           alignment: Alignment.center,
           children: [
+            // Background Elements (Subtle Glow)
+            Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: (isDark
+                            ? AppColors.electricAccent
+                            : AppColors.primaryGreen)
+                        .withOpacity(0.1),
+                    blurRadius: 60,
+                    spreadRadius: 20,
+                  ),
+                ],
+              ),
+            ),
             // Logo
             Image.asset(
               'assets/images/logo1.png',
-              width: 120, // Adjust size as needed
+              width: 120,
               height: 120,
             ),
-            // Loading Indicator overlay
-            const SizedBox(
-              width: 160, // Slightly larger than logo
-              height: 160,
+            // Loading Indicator
+            SizedBox(
+              width: 150,
+              height: 150,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.amber,
-                ), // Gold color
-                strokeWidth: 4,
+                  isDark ? AppColors.electricAccent : AppColors.primaryGreen,
+                ),
+                strokeWidth: 2,
               ),
             ),
           ],

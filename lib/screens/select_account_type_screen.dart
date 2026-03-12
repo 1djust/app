@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'identity_verification_screen.dart';
 import '../widgets/progress_bar.dart';
+import '../theme/app_colors.dart';
 
 class SelectAccountTypeScreen extends StatefulWidget {
   const SelectAccountTypeScreen({super.key});
@@ -34,12 +35,12 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textMain),
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
@@ -55,14 +56,14 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF15181A),
+                color: AppColors.textMain,
               ),
             ),
             const SizedBox(height: 8),
             const Text(
               "We'll tailor your experience based on this choice.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 14, color: AppColors.textMuted),
             ),
             const SizedBox(height: 32),
 
@@ -86,19 +87,19 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.surfaceLight,
                         border: Border.all(
                           color: isSelected
-                              ? const Color(0xFF15181A)
-                              : Colors.grey[200]!,
+                              ? AppColors.textMain
+                              : AppColors.borderLight,
                           width: isSelected ? 1.5 : 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -109,8 +110,10 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: AppColors.borderLight, width: 0.5),
                             ),
                             child: Image.asset(
                               typeData['image'],
@@ -135,20 +138,20 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Color(0xFF15181A),
+                                        color: AppColors.textMain,
                                       ),
                                     ),
                                     // Selection Indicator
                                     if (isSelected)
                                       const Icon(
                                         Icons.check_circle,
-                                        color: Color(0xFF15181A),
+                                        color: AppColors.primaryGreen,
                                         size: 24,
                                       )
                                     else
                                       const Icon(
                                         Icons.radio_button_unchecked,
-                                        color: Colors.grey,
+                                        color: AppColors.textMuted,
                                         size: 24,
                                       ),
                                   ],
@@ -156,28 +159,28 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
                                 const SizedBox(height: 4),
                                 Text(
                                   typeData['description'],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13,
-                                    color: Colors.grey[600],
+                                    color: AppColors.textMuted,
                                     height: 1.4,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Learn more',
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: Colors.amber,
+                                        color: Colors.amber.shade700,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    const Icon(
+                                    Icon(
                                       Icons.keyboard_arrow_down,
                                       size: 16,
-                                      color: Colors.amber,
+                                      color: Colors.amber.shade700,
                                     ),
                                   ],
                                 ),
@@ -192,10 +195,10 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
               ),
             ),
 
-            // Continue Button (renamed from Next)
+            // Continue Button
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 56,
               child: ElevatedButton(
                 onPressed: _selectedType != null
                     ? () {
@@ -209,14 +212,19 @@ class _SelectAccountTypeScreenState extends State<SelectAccountTypeScreen> {
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF15181A),
+                  backgroundColor: AppColors.textMain,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: const Text(
                   'Continue',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),

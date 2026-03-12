@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'select_account_type_screen.dart';
 import '../widgets/progress_bar.dart';
+import '../theme/app_colors.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -51,18 +52,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios,
+              color: isDark ? AppColors.textMainDark : AppColors.textMain),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Start',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: isDark ? AppColors.textMainDark : AppColors.textMain,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -75,31 +82,34 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             children: [
               const ProgressBar(currentStep: 1, totalSteps: 5),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Create Your Figures Account',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF15181A),
+                  color: isDark ? AppColors.textMainDark : AppColors.textMain,
                 ),
               ),
               const SizedBox(height: 16),
               Text(
                 "Let's get started — enter your email and country of residence to continue.",
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(
+                    fontSize: 14,
+                    color:
+                        isDark ? AppColors.textMutedDark : AppColors.textMuted),
               ),
               const SizedBox(height: 32),
 
               // Country Dropdown
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'Country of Residence ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
-                  children: [
+                  children: const [
                     TextSpan(
                       text: '*',
                       style: TextStyle(color: Colors.red),
@@ -111,16 +121,35 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               TextFormField(
                 controller: TextEditingController(text: _selectedCountry),
                 readOnly: true,
+                style: TextStyle(
+                    color:
+                        isDark ? AppColors.textMainDark : AppColors.textMain),
                 decoration: InputDecoration(
                   hintText: 'Select your country',
+                  hintStyle: TextStyle(
+                      color:
+                          isDark ? AppColors.textHintDark : AppColors.textHint),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  fillColor: Colors.grey[50],
+                  fillColor: isDark
+                      ? AppColors.midnightSurface
+                      : AppColors.surfaceLight,
                   filled: true,
                   prefixIcon: _selectedCountry != null
                       ? Padding(
@@ -128,28 +157,33 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           child: Image.network(
                             'https://flagcdn.com/w40/${_countries.firstWhere((c) => c['name'] == _selectedCountry)['code']}.png',
                             width: 24,
-                            height: 16, // Adjust aspect ratio as needed
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.flag, size: 24),
+                            height: 16,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                                Icons.flag,
+                                size: 24,
+                                color: isDark
+                                    ? AppColors.textMutedDark
+                                    : AppColors.textMuted),
                           ),
                         )
                       : null,
-                  suffixIcon: const Icon(
+                  suffixIcon: Icon(
                     Icons.arrow_drop_down,
-                    color: Colors.grey,
+                    color:
+                        isDark ? AppColors.textMutedDark : AppColors.textMuted,
                   ),
                 ),
                 onTap: () async {
                   final selected = await showModalBottomSheet<String>(
                     context: context,
                     backgroundColor: Colors.transparent,
-                    isScrollControlled: true, // Allow fuller height
+                    isScrollControlled: true,
                     builder: (context) {
                       return Container(
                         height: MediaQuery.of(context).size.height * 0.5,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.vertical(
+                        decoration: BoxDecoration(
+                          color: isDark ? AppColors.midnightBase : Colors.white,
+                          borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(20),
                           ),
                         ),
@@ -160,24 +194,32 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               width: 40,
                               height: 4,
                               decoration: BoxDecoration(
-                                color: Colors.grey[300],
+                                color: isDark
+                                    ? AppColors.borderDark
+                                    : AppColors.borderLight,
                                 borderRadius: BorderRadius.circular(2),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            const Text(
+                            Text(
                               'Select country of residence',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: isDark
+                                    ? AppColors.textMainDark
+                                    : AppColors.textMain,
                               ),
                             ),
                             const SizedBox(height: 16),
                             Expanded(
                               child: ListView.separated(
                                 itemCount: _countries.length,
-                                separatorBuilder: (context, index) =>
-                                    const Divider(height: 1),
+                                separatorBuilder: (context, index) => Divider(
+                                    height: 1,
+                                    color: isDark
+                                        ? AppColors.borderDark
+                                        : AppColors.borderLight),
                                 itemBuilder: (context, index) {
                                   final country = _countries[index];
                                   return ListTile(
@@ -190,14 +232,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) =>
-                                                const Icon(Icons.flag),
+                                                const Icon(Icons.flag,
+                                                    color: AppColors.textMuted),
                                       ),
                                     ),
                                     title: Text(
                                       country['name']!,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
+                                        color: isDark
+                                            ? AppColors.textMainDark
+                                            : AppColors.textMain,
                                       ),
                                     ),
                                     onTap: () {
@@ -225,20 +271,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const SizedBox(height: 8),
               Text(
                 'Determines which form applies to you',
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        isDark ? AppColors.textMutedDark : AppColors.textMuted),
               ),
               const SizedBox(height: 24),
 
               // Email Input
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'Email Address ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
-                  children: [
+                  children: const [
                     TextSpan(
                       text: '*',
                       style: TextStyle(color: Colors.red),
@@ -250,16 +299,35 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
+                style: TextStyle(
+                    color:
+                        isDark ? AppColors.textMainDark : AppColors.textMain),
                 decoration: InputDecoration(
                   hintText: 'e.g., johndoe@email.com',
+                  hintStyle: TextStyle(
+                      color:
+                          isDark ? AppColors.textHintDark : AppColors.textHint),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  fillColor: Colors.grey[50],
+                  fillColor: isDark
+                      ? AppColors.midnightSurface
+                      : AppColors.surfaceLight,
                   filled: true,
                 ),
                 validator: (value) {
@@ -275,20 +343,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const SizedBox(height: 8),
               Text(
                 'Used for login and verification',
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        isDark ? AppColors.textMutedDark : AppColors.textMuted),
               ),
               const SizedBox(height: 24),
 
               // Password Input
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'Password ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
-                  children: [
+                  children: const [
                     TextSpan(
                       text: '*',
                       style: TextStyle(color: Colors.red),
@@ -300,23 +371,44 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               TextFormField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
+                style: TextStyle(
+                    color:
+                        isDark ? AppColors.textMainDark : AppColors.textMain),
                 decoration: InputDecoration(
                   hintText: 'P\$Example1',
+                  hintStyle: TextStyle(
+                      color:
+                          isDark ? AppColors.textHintDark : AppColors.textHint),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  fillColor: Colors.grey[50],
+                  fillColor: isDark
+                      ? AppColors.midnightSurface
+                      : AppColors.surfaceLight,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-                      color: Colors.grey,
+                      color: isDark
+                          ? AppColors.textMutedDark
+                          : AppColors.textMuted,
                     ),
                     onPressed: () {
                       setState(() {
@@ -336,14 +428,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
               // Confirm Password Input
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'Confirm Password ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: isDark ? AppColors.textMainDark : AppColors.textMain,
                   ),
-                  children: [
+                  children: const [
                     TextSpan(
                       text: '*',
                       style: TextStyle(color: Colors.red),
@@ -355,23 +447,44 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
+                style: TextStyle(
+                    color:
+                        isDark ? AppColors.textMainDark : AppColors.textMain),
                 decoration: InputDecoration(
                   hintText: 'P\$Example1',
+                  hintStyle: TextStyle(
+                      color:
+                          isDark ? AppColors.textHintDark : AppColors.textHint),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                        color: isDark
+                            ? AppColors.borderDark
+                            : AppColors.borderLight),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  fillColor: Colors.grey[50],
+                  fillColor: isDark
+                      ? AppColors.midnightSurface
+                      : AppColors.surfaceLight,
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureConfirmPassword
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-                      color: Colors.grey,
+                      color: isDark
+                          ? AppColors.textMutedDark
+                          : AppColors.textMuted,
                     ),
                     onPressed: () {
                       setState(() {
@@ -397,7 +510,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 TextSpan(
                   text:
                       'By clicking Continue account, I agree that I have read and accepted the ',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: isDark
+                          ? AppColors.textMutedDark
+                          : AppColors.textMuted),
                   children: const [
                     TextSpan(
                       text: 'Terms of use',
@@ -422,18 +539,25 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               // Continue Button
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 56,
                 child: ElevatedButton(
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF15181A),
+                    backgroundColor:
+                        isDark ? AppColors.electricAccent : AppColors.textMain,
+                    foregroundColor:
+                        isDark ? AppColors.midnightBase : Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Continue',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? AppColors.midnightBase : Colors.white),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'create_account_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../theme/app_colors.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -62,12 +63,10 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Brand Colors
-    const Color primaryColor = Color(0xFF15181A);
-    const Color accentColor = Color(0xFFF0B140);
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: Stack(
         children: [
           // Background Elements
@@ -75,7 +74,7 @@ class _IntroScreenState extends State<IntroScreen>
             child: Column(
               children: [
                 Expanded(
-                  flex: 5, // Gives more space to the hero section
+                  flex: 5,
                   child: Center(
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 800),
@@ -131,7 +130,9 @@ class _IntroScreenState extends State<IntroScreen>
                               style: GoogleFonts.inter(
                                 fontSize: 32,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: isDark
+                                    ? AppColors.textMainDark
+                                    : AppColors.textMain,
                                 height: 1.1,
                               ),
                             ),
@@ -142,7 +143,9 @@ class _IntroScreenState extends State<IntroScreen>
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
-                                color: const Color.fromRGBO(255, 255, 255, 0.7),
+                                color: isDark
+                                    ? AppColors.textMutedDark
+                                    : AppColors.textMuted,
                               ),
                             ),
                           ],
@@ -165,19 +168,9 @@ class _IntroScreenState extends State<IntroScreen>
                       child: Column(
                         children: [
                           // Primary Button: Get Started
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: 56,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(32),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color.fromRGBO(240, 177, 64, 0.2),
-                                  blurRadius: 16,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -189,11 +182,15 @@ class _IntroScreenState extends State<IntroScreen>
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: accentColor,
-                                foregroundColor: Colors.black,
+                                backgroundColor: isDark
+                                    ? AppColors.electricAccent
+                                    : AppColors.textMain,
+                                foregroundColor: isDark
+                                    ? AppColors.midnightBase
+                                    : Colors.white,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               child: Text(
@@ -221,13 +218,17 @@ class _IntroScreenState extends State<IntroScreen>
                                 );
                               },
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                side: const BorderSide(
-                                  color: Color(0xFF2C3E50), // Soft gray border
-                                  width: 1,
+                                foregroundColor: isDark
+                                    ? AppColors.textMainDark
+                                    : AppColors.textMain,
+                                side: BorderSide(
+                                  color: isDark
+                                      ? AppColors.borderDark
+                                      : AppColors.borderLight,
+                                  width: 1.5,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               child: Text(

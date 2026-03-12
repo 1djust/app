@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 class CustomKeypad extends StatelessWidget {
   final Function(String) onKeyPressed;
@@ -16,52 +17,56 @@ class CustomKeypad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: Colors.grey[200], // Light grey background like generic keypad
-      padding: const EdgeInsets.only(bottom: 20, top: 10),
+      color: isDark ? AppColors.midnightBase : AppColors.surfaceLight,
+      padding: const EdgeInsets.only(bottom: 24, top: 16, left: 16, right: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildKey('1', ''),
-              _buildKey('2', 'ABC'),
-              _buildKey('3', 'DEF'),
+              _buildKey(context, '1', ''),
+              _buildKey(context, '2', 'ABC'),
+              _buildKey(context, '3', 'DEF'),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildKey('4', 'GHI'),
-              _buildKey('5', 'JKL'),
-              _buildKey('6', 'MNO'),
+              _buildKey(context, '4', 'GHI'),
+              _buildKey(context, '5', 'JKL'),
+              _buildKey(context, '6', 'MNO'),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildKey('7', 'PQRS'),
-              _buildKey('8', 'TUV'),
-              _buildKey('9', 'WXYZ'),
+              _buildKey(context, '7', 'PQRS'),
+              _buildKey(context, '8', 'TUV'),
+              _buildKey(context, '9', 'WXYZ'),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const SizedBox(width: 100), // Filler for left side of 0
-              _buildKey('0', ''),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.backspace_outlined),
-                    onPressed: onDeletePressed,
-                    color: Colors.black54,
+              const Expanded(child: SizedBox()),
+              _buildKey(context, '0', ''),
+              Expanded(
+                child: SizedBox(
+                  height: 52,
+                  child: Center(
+                    child: IconButton(
+                      icon: const Icon(Icons.backspace_outlined),
+                      onPressed: onDeletePressed,
+                      color: isDark
+                          ? AppColors.textMutedDark
+                          : AppColors.textMuted,
+                    ),
                   ),
                 ),
               ),
@@ -72,38 +77,52 @@ class CustomKeypad extends StatelessWidget {
     );
   }
 
-  Widget _buildKey(String value, String letters) {
+  Widget _buildKey(BuildContext context, String value, String letters) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Material(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.midnightSurface
+              : Colors.white,
+          borderRadius: BorderRadius.circular(12),
           elevation: 0,
           child: InkWell(
             onTap: () => onKeyPressed(value),
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(12),
             child: Container(
-              height: 50,
+              height: 52,
               alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.borderDark
+                        : AppColors.borderLight,
+                    width: 0.5),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     value,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      color:
+                          isDark ? AppColors.textMainDark : AppColors.textMain,
                     ),
                   ),
                   if (letters.isNotEmpty)
                     Text(
                       letters,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: isDark
+                            ? AppColors.textMutedDark
+                            : AppColors.textMuted,
                         letterSpacing: 1.5,
                       ),
                     ),
